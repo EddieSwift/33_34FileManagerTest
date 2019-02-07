@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "EGBDirectoryViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    EGBDirectoryViewController *vc = [[EGBDirectoryViewController alloc]
+                                      initWithFolderPath:@"/Users/eddie/Documents/IOSDevCourse"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+    
+    self.window.rootViewController = navigationController;
+    
     return YES;
 }
 
