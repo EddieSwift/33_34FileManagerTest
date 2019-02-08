@@ -12,7 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EGBDirectoryViewController : UITableViewController
 
+@property (strong, nonatomic) NSString *path;
+
 - (id) initWithFolderPath:(NSString*) path;
+
+- (IBAction)actionInfoCell:(id)sender;
 
 @end
 

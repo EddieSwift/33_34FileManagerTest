@@ -7,11 +7,13 @@
 //
 
 #import "EGBDirectoryViewController.h"
+#import "EGBFileCell.h"
+#import "UIView+UITableViewCell.h"
 
 @interface EGBDirectoryViewController ()
 
-@property (strong, nonatomic) NSString *path;
 @property (strong, nonatomic) NSArray *contents;
+@property (strong, nonatomic) NSString *selectedPath;
 
 @end
 
@@ -25,30 +27,55 @@
        
         self.path = path;
         
-        NSError *error = nil;
-        
-        self.contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:&error];
-        
-        if (error) {
-            NSLog(@"%@", [error localizedDescription]);
-        }
+//        NSError *error = nil;
+//        
+//        self.contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:&error];
+//        
+//        if (error) {
+//            NSLog(@"%@", [error localizedDescription]);
+//        }
     }
     
     return self;
+}
+
+- (void) setPath:(NSString *)path {
+    
+    _path = path;
+    
+    NSError *error = nil;
+    
+    self.contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:&error];
+    
+    if (error) {
+        NSLog(@"%@", [error localizedDescription]);
+    }
+    
+    [self.tableView reloadData];
+    
+    self.navigationItem.title = [self.path lastPathComponent];
 }
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
-    self.navigationItem.title = [self.path lastPathComponent];
+    if (!self.path) {
+        
+        self.path = @"/Users/eddie/Documents/IOSDevCourse";
+    }
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
     
     if ([self.navigationController.viewControllers count] > 1) {
         
         UIBarButtonItem *backToRoot = [[UIBarButtonItem alloc] initWithTitle:@"Back To Root"
-                                                                        style:UIBarButtonItemStylePlain
-                                                                        target:self
-                                                                        action:@selector(actionBackToRoot:)];
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(actionBackToRoot:)];
         
         self.navigationItem.rightBarButtonItem = backToRoot;
     }
@@ -76,6 +103,50 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (IBAction)actionInfoCell:(id)sender {
+    
+    UITableViewCell *cell = [sender superCell];
+    
+    if (cell) {
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+//       [[[UIAlertView alloc] initWithTitle:@"Yahho" message:[NSString stringWithFormat:@"action %ld %ld", indexPath.section, indexPath.row] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Yahoo" message:[NSString stringWithFormat:@"action %ld %ld", indexPath.section, indexPath.row] preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
+
+        [alert addAction:alertAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+     
+        
+        NSLog(@"action %ld %ld", indexPath.section, indexPath.row);
+    }
+ 
+    NSLog(@"actionInfoCell");
+}
+
+- (NSString*) fileSizeFromValue:(unsigned long long) size {
+ 
+    static NSString *units[] = {@"B", @"KB", @"MB", @"GB", @"TB"};
+//    NSArray *units = [[NSArray alloc] initWithObjects:@"B", @"KB", @"MB", @"GB", @"TB", nil];
+    static int unitsCount = 5;
+    
+    int index = 0;
+    
+    double fileSize = (double) size;
+    
+    while (fileSize > 1024 && index < unitsCount) {
+        
+        fileSize /= 1024;
+        index++;
+    }
+    
+    return [NSString stringWithFormat:@"%.2f %@", fileSize, units[index]];
+}
+
 
 #pragma mark - Private Methods
 
@@ -101,32 +172,58 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *identifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    
-    if (!cell) {
-        
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    }
+    static NSString *fileIdentifier = @"FileCell";
+    static NSString *folderIdentifier = @"FolderCell";
     
     NSString *fileName = [self.contents objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = fileName;
-    
     if ([self isDirectoryAtIndexPath:indexPath]) {
         
-        cell.imageView.image = [UIImage imageNamed:@"folder.png"];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:folderIdentifier];
+        cell.textLabel.text = fileName;
+        
+        return cell;
         
     } else {
         
-        cell.imageView.image = [UIImage imageNamed:@"file.png"];
+        NSString *path = [self.path stringByAppendingPathComponent:fileName];
+        
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+        
+        EGBFileCell *cell = [tableView dequeueReusableCellWithIdentifier:fileIdentifier];
+        
+        cell.nameLabel.text = fileName;
+        cell.sizeLabel.text = [self fileSizeFromValue:[attributes fileSize]];
+        
+        static NSDateFormatter *dateFormatter = nil;
+        
+        if (!dateFormatter) {
+            
+            dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"MM/dd/yyyy hh:mm a"];
+        }
+        
+        cell.dateLabel.text = [dateFormatter stringFromDate:[attributes fileModificationDate]];
+        
+        return cell;
     }
-
     
-    return cell;
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+ 
+    if ([self isDirectoryAtIndexPath:indexPath]) {
+        
+        return 44.f;
+        
+    } else {
+     
+        return 80.f;
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
  
@@ -138,11 +235,37 @@
         
         NSString *filePath = [self.path stringByAppendingPathComponent:fileName];
         
-        EGBDirectoryViewController *viewController = [[EGBDirectoryViewController alloc]
-                                                      initWithFolderPath:filePath];
+//        EGBDirectoryViewController *viewController = [[EGBDirectoryViewController alloc]
+//                                                      initWithFolderPath:filePath];
+//        [self.navigationController pushViewController:viewController animated:YES];
         
-        [self.navigationController pushViewController:viewController animated:YES];
+//        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Storyboard_iPhone" bundle:nil];
+        
+//        EGBDirectoryViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"EGBDirectoryViewController"];
+//        viewController.path = filePath;
+//        [self.navigationController pushViewController:viewController animated:YES];
+        
+        self.selectedPath = filePath;
+        
+        [self performSegueWithIdentifier:@"navigateDeep"  sender:nil];
     }
+}
+
+#pragma mark - Segue
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    
+    NSLog(@"shouldPerformSegueWithIdentifier: %@", identifier);
+ 
+    return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ 
+    NSLog(@"prepareForSegue: %@", segue.identifier);
+    
+    EGBDirectoryViewController *vc = segue.destinationViewController;
+    vc.path = self.selectedPath;
 }
 
 //- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

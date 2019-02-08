@@ -15,6 +15,10 @@
 		2C069104220B43A2005A7845 /* file.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C069102220B43A2005A7845 /* file.png */; };
 		2C069105220B43A2005A7845 /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C069103220B43A2005A7845 /* folder.png */; };
 		2C069108220B4415005A7845 /* EGBDirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C069107220B4415005A7845 /* EGBDirectoryViewController.m */; };
+		2C06910A220C5DDD005A7845 /* Storyboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C069109220C5DDC005A7845 /* Storyboard_iPhone.storyboard */; };
+		2C06910D220C7A62005A7845 /* EGBDummyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C06910C220C7A62005A7845 /* EGBDummyTableViewController.m */; };
+		2C069110220C7E3D005A7845 /* EGBFileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C06910F220C7E3D005A7845 /* EGBFileCell.m */; };
+		2C069115220C9465005A7845 /* UIView+UITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C069114220C9465005A7845 /* UIView+UITableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +34,13 @@
 		2C069103220B43A2005A7845 /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
 		2C069106220B4415005A7845 /* EGBDirectoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGBDirectoryViewController.h; sourceTree = "<group>"; };
 		2C069107220B4415005A7845 /* EGBDirectoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGBDirectoryViewController.m; sourceTree = "<group>"; };
+		2C069109220C5DDC005A7845 /* Storyboard_iPhone.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Storyboard_iPhone.storyboard; sourceTree = "<group>"; };
+		2C06910B220C7A62005A7845 /* EGBDummyTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGBDummyTableViewController.h; sourceTree = "<group>"; };
+		2C06910C220C7A62005A7845 /* EGBDummyTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGBDummyTableViewController.m; sourceTree = "<group>"; };
+		2C06910E220C7E3D005A7845 /* EGBFileCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGBFileCell.h; sourceTree = "<group>"; };
+		2C06910F220C7E3D005A7845 /* EGBFileCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGBFileCell.m; sourceTree = "<group>"; };
+		2C069113220C9465005A7845 /* UIView+UITableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+UITableViewCell.h"; sourceTree = "<group>"; };
+		2C069114220C9465005A7845 /* UIView+UITableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+UITableViewCell.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,12 +77,16 @@
 				2C069107220B4415005A7845 /* EGBDirectoryViewController.m */,
 				2C0690EB220B3FC7005A7845 /* AppDelegate.h */,
 				2C0690EC220B3FC7005A7845 /* AppDelegate.m */,
+				2C069109220C5DDC005A7845 /* Storyboard_iPhone.storyboard */,
 				2C0690F1220B3FC7005A7845 /* Main.storyboard */,
+				2C069111220C7E5C005A7845 /* Cells */,
 				2C069101220B43A2005A7845 /* Images */,
 				2C0690F4220B3FCA005A7845 /* Assets.xcassets */,
 				2C0690F6220B3FCA005A7845 /* LaunchScreen.storyboard */,
 				2C0690F9220B3FCA005A7845 /* Info.plist */,
 				2C0690FA220B3FCA005A7845 /* main.m */,
+				2C06910B220C7A62005A7845 /* EGBDummyTableViewController.h */,
+				2C06910C220C7A62005A7845 /* EGBDummyTableViewController.m */,
 			);
 			path = 33_34FileManagerTest;
 			sourceTree = "<group>";
@@ -83,6 +98,17 @@
 				2C069103220B43A2005A7845 /* folder.png */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		2C069111220C7E5C005A7845 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2C069113220C9465005A7845 /* UIView+UITableViewCell.h */,
+				2C069114220C9465005A7845 /* UIView+UITableViewCell.m */,
+				2C06910E220C7E3D005A7845 /* EGBFileCell.h */,
+				2C06910F220C7E3D005A7845 /* EGBFileCell.m */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,6 +172,7 @@
 				2C0690F5220B3FCA005A7845 /* Assets.xcassets in Resources */,
 				2C0690F3220B3FC7005A7845 /* Main.storyboard in Resources */,
 				2C069104220B43A2005A7845 /* file.png in Resources */,
+				2C06910A220C5DDD005A7845 /* Storyboard_iPhone.storyboard in Resources */,
 				2C069105220B43A2005A7845 /* folder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,7 +185,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C069108220B4415005A7845 /* EGBDirectoryViewController.m in Sources */,
+				2C06910D220C7A62005A7845 /* EGBDummyTableViewController.m in Sources */,
 				2C0690FB220B3FCA005A7845 /* main.m in Sources */,
+				2C069110220C7E3D005A7845 /* EGBFileCell.m in Sources */,
+				2C069115220C9465005A7845 /* UIView+UITableViewCell.m in Sources */,
 				2C0690ED220B3FC7005A7845 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
